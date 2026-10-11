@@ -12,6 +12,11 @@ fun main() {
             1 - Add
             2 - Delete
             3 - List
+            4 - Search
+            5 - Total
+            6 - Category-total
+            7 - Exit
+            (Commands are case insensitive)
             """.trimIndent()
         )
         print("Type a command: ")
@@ -27,7 +32,7 @@ fun main() {
                     continue
                 }
                 print("Which Category: ")
-                var category = readln().isEmpty { "Untitled" }
+                var category = readln().ifEmpty { "Untitled" }
                 expenseList.add(
                     Expense(
                         name = name,
@@ -51,6 +56,38 @@ fun main() {
             "list" -> {
                 expenseList.forEach {
                     println("ID: ${it.id}, ${it.name}, Cost: ${it.amount}, Category: ${it.category}")
+                }
+            }
+
+            "search" -> {
+                print("Search Here(by expense name): ")
+                val searchString = readln()
+                val tmpList = expenseList.filter { it.name.contains(searchString, ignoreCase = true) }
+                if (tmpList.isEmpty()) {
+                    println("No matching result")
+                    continue
+                }
+                println("<<<Search Result>>>")
+                tmpList.forEach {
+                    println("ID: ${it.id}, ${it.name}, Cost: ${it.amount}, Category: ${it.category}")
+                }
+            }
+
+            "total" -> {
+                var totalExpenditure: Double = 0.0
+                expenseList.forEach {
+                    totalExpenditure = totalExpenditure + it.amount
+                }
+                println("Total Expenses: ${totalExpenditure} IQD")
+            }
+
+            "category-total" -> {
+                val totalByCategory = mutableMapOf<String, Double>()
+                expenseList.forEach {
+                    totalByCategory[it.category] = totalByCategory.getOrDefault(it.category, 0.0) + it.amount
+                }
+                totalByCategory.forEach { category, total ->
+                    println("Category: ${category}, Total: ${total}")
                 }
             }
         }
