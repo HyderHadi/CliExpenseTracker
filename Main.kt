@@ -1,10 +1,11 @@
 val expenseList = mutableListOf<Expense>()
 
-
 fun main() {
 
+    file.createNewFile()
     var command: String? = null
 
+    expenseList.addAll(readFromFile(csvFile = file))
     while (command?.lowercase() != "exit") {
         println(
             """
@@ -40,6 +41,7 @@ fun main() {
                         category = category
                     )
                 )
+                writeToFile(expenseList)
                 println("Expense Added Successfully")
             }
 
@@ -50,13 +52,16 @@ fun main() {
                     println("Expense Doesn't Exist")
                     continue
                 }
+                writeToFile(expenseList)
                 println("Successful Deletion")
             }
 
             "list" -> {
+                println("------------------------------------------------------------------------")
                 expenseList.forEach {
                     println("ID: ${it.id}, ${it.name}, Cost: ${it.amount}, Category: ${it.category}")
                 }
+                println("------------------------------------------------------------------------")
             }
 
             "search" -> {
@@ -78,7 +83,9 @@ fun main() {
                 expenseList.forEach {
                     totalExpenditure = totalExpenditure + it.amount
                 }
+                println("------------------------------------------------------------------------")
                 println("Total Expenses: ${totalExpenditure} IQD")
+                println("------------------------------------------------------------------------")
             }
 
             "category-total" -> {
@@ -86,9 +93,11 @@ fun main() {
                 expenseList.forEach {
                     totalByCategory[it.category] = totalByCategory.getOrDefault(it.category, 0.0) + it.amount
                 }
+                println("------------------------------------------------------------------------")
                 totalByCategory.forEach { category, total ->
                     println("Category: ${category}, Total: ${total}")
                 }
+                println("------------------------------------------------------------------------")
             }
         }
     }

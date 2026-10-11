@@ -11,5 +11,11 @@ data class Expense(
         private fun generateId(): Long {
             return nextId++
         }
+        
+        fun updateNextId(currentId: Long) {
+            if(currentId >= nextId) {
+                nextId = currentId + 1
+            }
+        }
     }
 }
