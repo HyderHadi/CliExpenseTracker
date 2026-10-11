@@ -1,27 +1,33 @@
-
 val expenseList = mutableListOf<Expense>()
 
 
-
 fun main() {
-    
+
     var command: String? = null
-    
-    while(command?.lowercase() != "exit") {
+
+    while (command?.lowercase() != "exit") {
+        println(
+            """
+            (((  Expense Tracker  )))
+            1 - Add
+            2 - Delete
+            3 - List
+            """.trimIndent()
+        )
         print("Type a command: ")
         command = readln()
-        when(command) {
+        when (command) {
             "add" -> {
                 print("Type name of the expense: ")
                 val name = readln()
                 print("Amount: ")
                 val amount = readln().toDoubleOrNull()
-                if(amount == null) {
+                if (amount == null) {
                     println("Wrong expense amount")
                     continue
                 }
                 print("Which Category: ")
-                val category = readln()
+                var category = readln().isEmpty { "Untitled" }
                 expenseList.add(
                     Expense(
                         name = name,
@@ -30,6 +36,22 @@ fun main() {
                     )
                 )
                 println("Expense Added Successfully")
+            }
+
+            "delete" -> {
+                print("Type the id number of an expense to delete: ")
+                val tmpId = readln().toLongOrNull()
+                if (!expenseList.removeIf { it.id == tmpId }) {
+                    println("Expense Doesn't Exist")
+                    continue
+                }
+                println("Successful Deletion")
+            }
+
+            "list" -> {
+                expenseList.forEach {
+                    println("ID: ${it.id}, ${it.name}, Cost: ${it.amount}, Category: ${it.category}")
+                }
             }
         }
     }
